@@ -2,32 +2,6 @@ import { useEffect, useReducer } from 'react';
 
 const SECURITY_CODE = 'paradigma';
 
-const initialState = {
-	word: '',
-	loading: false,
-	error: false,
-	deleted: false,
-	confirmed: false,
-};
-
-const reducerObject = state => ({
-	ERROR: { ...state, error: true, loading: false },
-	CHECK: {
-		...state,
-		loading: true,
-	},
-	CONFIRM: {
-		...state,
-		error: false,
-		confirmed: true,
-		loading: false,
-	},
-});
-
-const reducer = (state, action) => {
-	return reducerObject(state)?.[action.type] || state;
-};
-
 /* Component */
 export function UseReducer({ name }) {
 	/* Por convencion se usa el dispatch */
@@ -46,35 +20,7 @@ export function UseReducer({ name }) {
 		}
 
 		console.log('Finish effect');
-	}, [state.loading]); 
-
-	const handleConfirm = () => {
-		dispatch({ type: 'CONFIRM' })
-	};
-
-	const handleChange = e => {
-		// setError(false)
-		setState({
-			...state,
-			word: e.target.value,
-		});
-	};
-
-	const handleDelete = () => {
-		setState({
-			...state,
-			deleted: true,
-		});
-	};
-
-	const handleComeBack = () => {
-		setState({
-			...state,
-			word: '',
-			deleted: false,
-			confirmed: false,
-		});
-	};
+	}, [state.loading]);
 
 	const renderTitle = (confirmed, deleted, name) => {
 		if (!confirmed && !deleted) {
@@ -98,21 +44,29 @@ export function UseReducer({ name }) {
 				<input
 					type='text'
 					placeholder='código de seguridad'
-					onChange={handleChange}
+					onChange={e => dispatch({ type: 'WRITE', payload: e.target.value })}
 					value={state.word}
 				/>
-				<button onClick={handleConfirm}>Comprobar</button>
+				<button
+					onClick={() => dispatch( { type: 'CHECK' })}
+				>
+					Comprobar
+				</button>
 			</div>
 		);
-	} else if (state.confirmed && !state.deleted) {
+	} else if (!state.deleted && state.confirmed) {
 		return (
 			<>
 				<h2>{renderTitle(state.confirmed, state.deleted, name)}</h2>
 
 				<p>¿Seguro quieres eliminar el UseState</p>
 				<div>
-					<button onClick={handleDelete}>Si, eliminar</button>
-					<button onClick={handleComeBack}>No, volver</button>
+					<button onClick={() => dispatch({ type: 'DELETE' })}>
+						Si, eliminar
+					</button>
+					<button onClick={() => dispatch({ type: 'RESET' })}>
+						No, volver
+					</button>
 				</div>
 			</>
 		);
@@ -122,8 +76,50 @@ export function UseReducer({ name }) {
 				<h2>{renderTitle(state.confirmed, state.deleted, name)}</h2>
 
 				<p>Eliminado con éxito</p>
-				<button onClick={handleComeBack}>Resetear, volver atras</button>
+				<button onClick={() => dispatch({ type: 'RESET' })}>
+					Resetear, volver atras
+				</button>
 			</>
 		);
 	}
 }
+
+const initialState = {
+	word: '',
+	loading: false,
+	error: false,
+	deleted: false,
+	confirmed: false,
+};
+
+const reducerObject = (state, payload) => ({
+	ERROR: { ...state, error: true, loading: false },
+	CHECK: {
+		...state,
+		loading: true,
+	},
+	CONFIRM: {
+		...state,
+		error: false,
+		confirmed: true,
+		loading: false,
+	},
+	DELETE: {
+		...state,
+		deleted: false,
+	},
+	RESET: {
+		...state,
+		confirmed: false,
+		deleted: false,
+		word: '',
+	},
+	WRITE: {
+		...state,
+		word: payload,
+	},
+});
+
+const reducer = (state, action) => {
+	return reducerObject(state, action.payload)?.[action.type] || state;
+};
