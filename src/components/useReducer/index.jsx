@@ -50,7 +50,7 @@ export function UseReducer({ name }) {
 				<button
 					onClick={() => dispatch( { type: 'CHECK' })}
 				>
-					Comprobar
+					Check word
 				</button>
 			</div>
 		);
