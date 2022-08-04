@@ -3,8 +3,6 @@ import { Loading } from '../Loading';
 
 const SECURITY_CODE = 'paradigma';
 export class UseClass extends Component {
-
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,9 +31,9 @@ export class UseClass extends Component {
 			setTimeout(() => {
 				console.log('Haciendo validación');
 				if (this.state.value !== SECURITY_CODE) {
-					this.setState({error: true});
+					this.setState({ error: true });
 				} else {
-					this.setState({error: false});
+					this.setState({ error: false });
 				}
 				this.setState({ loading: false });
 				console.log('Terminando validación');
@@ -49,7 +47,7 @@ export class UseClass extends Component {
 			<div>
 				<h2>Eliminar {this.props.name}</h2>
 				<p>Por favor, escriba el código de seguridad.</p>
-				{(error && !loading) && <p>Error: el código esta incorrecto</p>}
+				{error && !loading && <p>Error: el código esta incorrecto</p>}
 				{loading && <Loading />}
 				<input
 					type='text'

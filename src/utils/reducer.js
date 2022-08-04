@@ -20,49 +20,47 @@ export const useReducer = (state, action) => {
 			loading: true,
 		};
 	}
-  // Return por default
-  else{
-    return {
-      ...state,
-    }
-  }
+	// Return por default
+	else {
+		return {
+			...state,
+		};
+	}
 };
 
 /* 2. Esta es la forma más popular */
 export const useReducerSwitch = (state, action) => {
-  switch(action.type){
-    case 'ERROR':
-      return {
-        ...state,
-        error: true,
-        loading: false
-      };
-    case 'CHECK':
-      return {
-        ...state,
-        loading: true
-      }
-    default:
-      return{
-        ...state,
-      }
-  }
-}
+	switch (action.type) {
+		case 'ERROR':
+			return {
+				...state,
+				error: true,
+				loading: false,
+			};
+		case 'CHECK':
+			return {
+				...state,
+				loading: true,
+			};
+		default:
+			return {
+				...state,
+			};
+	}
+};
 
 /* 3. Forma */
 /* Dividimos nuestro reducer en dos */
-export const reducerObject = (state) => ({
-  'ERROR': {...state,
-    error: true,
-    loading: false},
-  'CHECK': {
-    ...state,
-    loading: true
-  },
-})
+export const reducerObject = state => ({
+	ERROR: { ...state, error: true, loading: false },
+	CHECK: {
+		...state,
+		loading: true,
+	},
+});
 
-export const reducer = (state, action ) =>  {
-  return (reducerObject(state)?.[action.type] || state);
+export const reducer = (state, action) => {
+	return reducerObject(state)?.[action.type] || state;
 };
 
-reducer(initialState)
+reducer(initialState);
