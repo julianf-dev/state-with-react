@@ -3,6 +3,7 @@ import { useEffect, useReducer } from 'react';
 const SECURITY_CODE = 'paradigma';
 
 /* Component */
+/* Declarative Code */
 export function UseReducer({ name }) {
 	/* Por convencion se usa el dispatch */
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -106,7 +107,7 @@ const reducerObject = (state, payload) => ({
 	},
 	DELETE: {
 		...state,
-		deleted: false,
+		deleted: true,
 	},
 	RESET: {
 		...state,
